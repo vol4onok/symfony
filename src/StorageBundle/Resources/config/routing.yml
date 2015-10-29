@@ -1,0 +1,3 @@
+storage_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: StorageBundle:Default:index }

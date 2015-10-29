@@ -1,0 +1,9 @@
+services:
+  admin.category:
+         class: StorageBundle\Admin\CategoryAdmin
+         tags:
+             - { name: sonata.admin, manager_type: orm, group: 'storage', label: "Category" }
+         arguments:
+             - ~
+             - StorageBundle\Entity\Category
+             - ~
