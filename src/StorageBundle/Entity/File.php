@@ -2,7 +2,7 @@
 namespace StorageBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity
  * @ORM\Table(name="storage_file")
@@ -26,6 +26,11 @@ class File
      * @var string
      */
     private $title;
+
+    /**
+     * Unmapped property to handle file uploads
+     */
+    private $file;
 
     /**
      * @ORM\Column(name="slug", type="string", length=128)
@@ -77,13 +82,44 @@ class File
     }
 
     /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * Get the slug.
-     * @return string
+     * @return UploadedFile
      */
     public function getSlug()
     {
 
         return $this->slug;
+
+    }
+
+    /**
+     * set the slug.
+     * @param $file
+     */
+    public function setSlug($file)
+    {
+
+        $this->slug = $file;
 
     }
 
@@ -125,5 +161,19 @@ class File
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function upload($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+        $fileName = uniqid() . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $path,
+            $fileName
+        );
+        $this->slug = $fileName;
+        $this->setFile(null);
     }
 }

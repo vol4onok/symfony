@@ -61,8 +61,8 @@ class CategoryAdmin extends Admin
                     return $qb;
                 }
             ))
-            ->add('title', 'text', array('label' => 'Title'))
-            ->add('slug', 'text', array('label' => 'Slug'))
+            ->add('title', 'text', array('label' => 'Title', 'required'=>true))
+            ->add('slug', 'text', array('label' => 'Slug', 'required'=>true))
             ->add('description', 'textarea', array('label' => 'Description'))
             ->end()
         ;
@@ -127,12 +127,14 @@ class CategoryAdmin extends Admin
     private function getFullPath($object) {
         $em = $this->modelManager->getEntityManager($object);
         $repo = $em->getRepository("StorageBundle:Category");
-        $objectTree = $repo->getPath($object);
         return implode(DIRECTORY_SEPARATOR, array_map(function(\StorageBundle\Entity\Category $object) {
                 return $object->getSlug();
-        }, $objectTree));
+        }, $repo->getPath($object)));
     }
 
+    /**
+     * @param string $subject
+     */
     public function setSubject($subject) {
         if ($subject->getId()) {
             $this->oldPath = $this->getFullPath($subject);
@@ -156,5 +158,4 @@ class CategoryAdmin extends Admin
             exec("rm -R " . $path . $this->oldPath);
         }
     }
-
 }

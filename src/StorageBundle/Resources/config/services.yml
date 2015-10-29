@@ -1,9 +1,17 @@
 services:
-  admin.category:
-         class: StorageBundle\Admin\CategoryAdmin
-         tags:
-             - { name: sonata.admin, manager_type: orm, group: 'storage', label: "Category" }
-         arguments:
-             - ~
-             - StorageBundle\Entity\Category
-             - ~
+    admin.category:
+        class: StorageBundle\Admin\CategoryAdmin
+        tags:
+         - { name: sonata.admin, manager_type: orm, group: 'storage', label: "Categories" }
+        arguments:
+          - ~
+          - StorageBundle\Entity\Category
+          - ~
+    admin.file:
+        class: StorageBundle\Admin\FileAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'storage', label: "Files" }
+        arguments:
+            - ~
+            - StorageBundle\Entity\File
+            - ~
