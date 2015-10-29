@@ -15,6 +15,8 @@ class CategoryAdmin extends Admin
      */
     const MAX_LEVEL = 5;
 
+    protected $oldPath;
+    protected $newPath;
 
     /**
      * @param string $context
@@ -28,7 +30,8 @@ class CategoryAdmin extends Admin
             ->createQueryBuilder('p')
             ->select('p')
             ->from('StorageBundle:Category', 'p')
-            ->where('p.parent IS NOT NULL');
+            ->where('p.parent IS NOT NULL')
+            ->orderBy('p.root, p.lft', 'ASC');
 
         $query = new ProxyQuery($queryBuilder);
         return $query;
@@ -86,8 +89,23 @@ class CategoryAdmin extends Admin
         $repo->verify();
         $repo->recover();
         $em->flush();
+        $this->newPath = $this->getFullPath($object);
+        $this->checkDirHierarchy();
     }
+
     public function postUpdate($object)
+    {
+        $this->request->server->get('DOCUMENT_ROOT');
+        $em = $this->modelManager->getEntityManager($object);
+        $repo = $em->getRepository("StorageBundle:Category");
+        $repo->verify();
+        $repo->recover();
+        $em->flush();
+        $this->newPath = $this->getFullPath($object);
+        $this->checkDirHierarchy();
+    }
+
+    public function preRemove($object)
     {
         $this->request->server->get('DOCUMENT_ROOT');
         $em = $this->modelManager->getEntityManager($object);
@@ -97,13 +115,46 @@ class CategoryAdmin extends Admin
         $em->flush();
     }
 
-    public function preRemove($object)
+    public function postRemove($object)
     {
-        $this->request->server->get('DOCUMENT_ROOT');
-        $em = $this->modelManager->getEntityManager($object);
-        $repo = $em->getRepository("ShtumiPravBundle:Page");
-        $repo->verify();
-        $repo->recover();
-        $em->flush();
+        $this->checkDirHierarchy();
     }
+
+    /**
+     * @param $object
+     * @return string
+     */
+    private function getFullPath($object) {
+        $em = $this->modelManager->getEntityManager($object);
+        $repo = $em->getRepository("StorageBundle:Category");
+        $objectTree = $repo->getPath($object);
+        return implode(DIRECTORY_SEPARATOR, array_map(function(\StorageBundle\Entity\Category $object) {
+                return $object->getSlug();
+        }, $objectTree));
+    }
+
+    public function setSubject($subject) {
+        if ($subject->getId()) {
+            $this->oldPath = $this->getFullPath($subject);
+        }
+        $this->subject = $subject;
+    }
+
+    /**
+     * Creator path
+     */
+    private function checkDirHierarchy() {
+        $path = $this->request->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR;
+        if ($this->newPath && empty($this->oldPath) && !is_dir($path . $this->newPath)) {
+            //create dir
+            exec("mkdir -p " . $path . $this->newPath);
+        } elseif ($this->newPath && $this->oldPath && $this->newPath != $this->oldPath && is_dir($this->oldPath)) {
+            // move or rename dir
+            exec ("mv " . $path . $this->oldPath . ' ' . $path . $this->newPath);
+        } elseif (empty($this->newPath) && $this->oldPath && is_dir($path . $this->newPath)) {
+            // remove dir
+            exec("rm -R " . $path . $this->oldPath);
+        }
+    }
+
 }
