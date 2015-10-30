@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Test project" default="set-up" basedir="" description="Test project">
+    <!--Properties-->
+    <if><not><isset property="environment" /></not>
+        <then>
+            <property name="environment" value="dev"/>
+            <!--<fail message="Missing environment!" />-->
+        </then>
+        <else>
+            <echo>Environment: ${environment}</echo>
+        </else>
+    </if>
+
+    <if><not><isset property="version" /></not>
+        <then>
+            <property name="project.version" value="1"/>
+        </then>
+        <else>
+            <property name="project.version" value="2"/>
+        </else>
+    </if>
+
+    <target name="composer-install" >
+        <echo msg="Installing composer libraries" />
+        <exec command="php composer.phar install" dir="" escape="false" passthru="true"/>
+    </target>
+
+    <target name="create-database-structure">
+        <!--Initializing database-->
+        <echo msg="Creating database" />
+        <exec command="php app/console doctrine:database:create" escape="false" passthru="true"/>
+
+        <pdosqlexec url="mysql:host=192.168.3.15;dbname=test_bd" userid="root" password="root" onerror="abort">
+            <fileset dir="build/db/">
+                <include name="*.sql"/>
+            </fileset>
+        </pdosqlexec>
+    </target>
+
+    <!--Set Up-->
+    <target name="set-up" depends="create-database-structure">
+        <if>
+            <equals arg1="${project.version}" arg2="1" />
+            <then>
+                <phingcall target="composer-install" />
+            </then>
+            <else>
+                <echo msg="Database should be already createed" />
+            </else>
+        </if>
+    </target>
+
+</project>
