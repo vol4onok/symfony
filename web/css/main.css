@@ -8,3 +8,21 @@ body {
     max-width: 330px;
     padding: 15px;
 }
+.nav-list {
+    margin-bottom: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.nav-list.tree a {
+    display: inline;
+    padding: 2px;
+}
+ul.nav.nav-list{
+    border-left: 2px solid black;
+}
+#file-content {
+    padding: 5px;
+}
+.text-center {
+    text-align: center;
+}

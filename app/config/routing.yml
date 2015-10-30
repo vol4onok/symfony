@@ -32,5 +32,10 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 sonata_user:
-        resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-        prefix: /admin
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin
+cmf_media_file:
+    resource: "@CmfMediaBundle/Resources/config/routing/file.xml"
+
+cmf_media_image:
+    resource: "@CmfMediaBundle/Resources/config/routing/image.xml"

@@ -17,7 +17,7 @@ class Category
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    private $id;
 
     /**
      * Creates a parent / child relationship on this entity.
@@ -25,7 +25,7 @@ class Category
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $parent = null;
+    private $parent = null;
 
     /**
      * @Gedmo\TreeLeft
@@ -60,7 +60,7 @@ class Category
     /**
      * @ORM\OneToMany(targetEntity="File", mappedBy="category")
      */
-    public $files;
+    private $files;
 
     /**
      * @ORM\Column(name="title", type="string", length=64)
@@ -78,7 +78,7 @@ class Category
      *
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
      * Gets the Primary key value.
@@ -207,7 +207,7 @@ class Category
      * @param Category $children
      * @return Category
      */
-    public function addChild(Category $children)
+    public function addChildren(Category $children)
     {
         $this->children[] = $children;
 
@@ -219,7 +219,7 @@ class Category
      *
      * @param Category $children
      */
-    public function removeChild(Category $children)
+    public function removeChildren(Category $children)
     {
         $this->children->removeElement($children);
     }
@@ -232,6 +232,39 @@ class Category
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * Add children
+     *
+     * @param Files $children
+     * @return Category
+     */
+    public function addFiles(File $files)
+    {
+        $this->files[] = $files;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param Files $children
+     */
+    public function removeFiles(File $files)
+    {
+        $this->files->removeElement($files);
+    }
+
+    /**
+     * Get Files
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 
     /**

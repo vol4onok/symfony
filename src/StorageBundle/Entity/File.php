@@ -14,12 +14,13 @@ class File
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="files")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $category;
+    private $category;
 
     /**
      * @ORM\Column(name="title", type="string", length=64)
@@ -42,7 +43,7 @@ class File
      *
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
      * Gets the Primary key value.

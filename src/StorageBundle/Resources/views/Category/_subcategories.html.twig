@@ -1,0 +1,16 @@
+{% for category in categories %}
+    {% set path = path ~ '/' ~ category.slug %}
+<li>
+    <label class="tree-toggler nav-header">{{ category.title }}</label>
+    {% if category.__children or category.files %}
+    <ul class="nav nav-list tree">
+        {% if category.__children %}
+            {% include "StorageBundle:Category:_subcategories.html.twig" with {'categories': category.__children, 'path' : path} %}
+        {% endif %}
+        {% for file in category.files %}
+        <li><span>{{ file.title }}</span> - <a class="see-file" href="/{{ path}}/{{ file.slug }}">see</a> <a download href="/{{ path}}/{{ file.slug }}">download</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</li>
+{% endfor %}
