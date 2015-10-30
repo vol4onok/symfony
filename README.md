@@ -5,75 +5,36 @@
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
   # end
-Symfony Standard Edition
-========================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony2
-application that you can use as the skeleton for your new applications.
+Install Project
+=================
+1. Install virtualBox + Vagrant
+2. cd /path/project
+3. vagrant up
+4. edit hosts (192.168.3.15 project.int)
+The project is available here: http://project.int/
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
+Now you can work with virtual machine in vagrant ssh
 
-What's inside?
---------------
 
-The Symfony Standard Edition is configured with the following defaults:
+Implement web application for files upload and their folders categorization and resulting view on separate page.
 
-  * An AppBundle you can use to start coding;
+Web application consists of 2 sections:
+---------------------------------------
+• manager console with CRUD editors for categories/folders and files (aka backend)
+• resulting view of categories and files (aka frontend)
 
-  * Twig as the only configured template engine;
-
-  * Doctrine ORM/DBAL;
-
-  * Swiftmailer;
-
-  * Annotations enabled for everything.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * [**AsseticBundle**][12] - Adds support for Assetic, an asset processing
-    library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  https://symfony.com/doc/2.7/book/installation.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/2.7/book/doctrine.html
-[8]:  https://symfony.com/doc/2.7/book/templating.html
-[9]:  https://symfony.com/doc/2.7/book/security.html
-[10]: https://symfony.com/doc/2.7/cookbook/email.html
-[11]: https://symfony.com/doc/2.7/cookbook/logging/monolog.html
-[12]: https://symfony.com/doc/2.7/cookbook/assetic/asset_management.html
-[13]: https://symfony.com/doc/2.7/bundles/SensioGeneratorBundle/index.html
+Conditions:
+-----------
+• each file should belong to one of the given categories
+• each category should be represented both in DB and file structure as folders with actual nesting structure of categories
+• file should reside physically in specified folder that represents referenced category
+• each folder should have at most 10 files
+• authorization is not required (but is a plus)
+• visual interface, libraries up to developer to decide
+• maximum nesting level of categories is 5
+• when file being clicked on frontend we should be see/download contents of file
+• only text files are allowed to be uploaded
+• use symfony2 framework
+• use MySQL
+• you are free to ask questions and some conditions of task can be changed upon mutual agreement

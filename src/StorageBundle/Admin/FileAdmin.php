@@ -41,6 +41,7 @@ class FileAdmin extends Admin
                 'required'=>true,
                 'query_builder' => function($er) use ($id) {
                     $qb = $er->createQueryBuilder('p');
+                    $qb->where('p.parent IS NOT NULL');
                     if ($id){
                         $qb
                             ->andWhere('p.id <> :id')
