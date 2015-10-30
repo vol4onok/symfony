@@ -21,7 +21,7 @@ sonata_user_register:
     prefix: /register
 
 sonata_user_change_password:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_change_password_1.xml"
+    resource: "@SonataUserBundle/Resources/sdfadsgdzsgsxzgfconfig/routing/sonata_change_password_1.xml"
     prefix: /profile
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -34,8 +34,3 @@ _sonata_admin:
 sonata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
     prefix: /admin
-cmf_media_file:
-    resource: "@CmfMediaBundle/Resources/config/routing/file.xml"
-
-cmf_media_image:
-    resource: "@CmfMediaBundle/Resources/config/routing/image.xml"
