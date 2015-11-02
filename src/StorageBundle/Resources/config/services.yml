@@ -15,8 +15,3 @@ services:
             - ~
             - StorageBundle\Entity\File
             - ~
-    storage.cmf_media:
-        public: false
-        tags:
-            - { name: cmf_media }
-        class: Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\CmfMediaExtension

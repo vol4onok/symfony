@@ -41,16 +41,17 @@ class CategoryAdmin extends Admin
     {
         $subject = $this->getSubject();
         $id = $subject->getId();
+        $maxLevel = self::MAX_LEVEL;
         $formMapper
             ->with('Category')
             ->add('parent', 'entity', array(
                 'class' => 'StorageBundle\Entity\Category',
                 'label' => 'Parent',
                 'required'=>true,
-                'query_builder' => function($er) use ($id) {
+                'query_builder' => function($er) use ($id, $maxLevel) {
                     $qb = $er->createQueryBuilder('p');
-                    $qb->andWhere('p.lvl < :level')
-                        ->setParameter('level', self::MAX_LEVEL);
+                    $qb->andWhere('p.lvl <= :level')
+                        ->setParameter('level', $maxLevel);
                     if ($id){
                         $qb
                             ->andWhere('p.id <> :id')

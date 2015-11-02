@@ -3,16 +3,23 @@
     <!--Properties-->
     <if><not><isset property="environment" /></not>
         <then>
-            <property name="environment" value="dev"/>
+            <property name="environment" value="develop"/>
         </then>
         <else>
             <echo>Environment: ${environment}</echo>
         </else>
     </if>
+    <resolvepath propertyName="root_path" file="./" />
+    <property name="build_path" value="${root_path}/build" />
+    <property name="app_path" value="${root_path}/app" />
+    <property name="config_path" value="${root_path}/app/config/" />
     <property name="pdo.host" value="192.168.3.15"/>
     <property name="pdo.user" value="root"/>
     <property name="pdo.password" value="root"/>
     <property name="pdo.dbname" value="test_bd"/>
+
+    <property file="${build_path}/properties/${environment}.properties" />
+    <property name="db.dbname" value="${environment}_${db.dbname_template}"/>
 
     <if><not><isset property="version" /></not>
         <then>
@@ -23,40 +30,59 @@
         </else>
     </if>
 
-    <target name="composer-install" >
-        <echo msg="Installing composer libraries" />
-        <exec command="php composer.phar self-update" dir="" escape="false" passthru="true"/>
-        <exec command="php composer.phar install" dir="" escape="false" passthru="true"/>
-    </target>
+    <target name="compile-vendors">
+        <available file="${vendor_path}" property="vendor_path_exists" value="1" />
+        <if>
+            <equals arg1="${vendor_path_exists}" arg2="1" />
+            <then>
+                <symlink target="${vendor_path}" link="${root_path}/vendor" />
+            </then>
+        </if>
 
+        <exec command="php composer.phar install" returnProperty="vendors_output" />
+    </target>
     <target name="create-database-structure">
         <!--Initializing database-->
         <echo msg="Creating database" />
-        <exec command="php app/console doctrine:database:create" escape="false" passthru="true"/>
-        <echo msg="Creating database" />
-        <pdosqlexec url="mysql:host=${pdo.host}" userid="${pdo.user}" password="${pdo.password}" onerror="abort" autocommit="true">
-            DROP DATABASE IF EXISTS ${pdo.dbname};
-            CREATE DATABASE ${pdo.dbname};
-        </pdosqlexec>
-        <pdosqlexec url="mysql:host=${pdo.host};dbname=${pdo.dbname}" userid="${pdo.user}" password="${pdo.password}" onerror="abort">
-
-            <fileset dir="build/db/">
+        <exec command="php app/console doctrine:database:create"/>
+        <echo msg="End creating database" />
+        <pdosqlexec url="mysql:host=${db.host}; dbname=${db.dbname}" userid="${db.username}" password="${db.password}" onerror="abort">
+            <fileset dir="build/db/${environment}/">
                 <include name="*.sql"/>
             </fileset>
         </pdosqlexec>
     </target>
 
     <!--Set Up-->
-    <target name="set-up" depends="create-database-structure">
-        <if>
-            <equals arg1="${project.version}" arg2="1" />
-            <then>
-                <phingcall target="composer-install" />
-            </then>
-            <else>
-                <echo msg="Database should be already createed" />
-            </else>
-        </if>
+    <target name="set-up" depends="clean-up,compile-configuration,compile-vendors,create-database-structure,warmup"></target>
+
+    <target name="clean-up">
+        <echo msg="Cleaning up" />
+
+        <chmod file="${app_path}/cache" mode="0777" />
+        <chmod file="${app_path}/logs" mode="0777" />
+        <chmod file="${root_path}/web" mode="0777" />
     </target>
 
+    <target name="warmup">
+        <exec command="php ${root_path}/app/console assets:install web --no-interaction --no-ansi --symlink --env=prod" />
+
+        <exec command="php ${root_path}/app/console cache:clear --env=prod  --no-interaction --no-ansi" />
+        <exec command="php ${root_path}/app/console cache:warmup --env=prod  --no-interaction --no-ansi" />
+        <exec command="php app/console assetic:dump" />
+    </target>
+
+    <target name="compile-configuration">
+        <copy file="${config_path}/parameters.yml.template" tofile="${config_path}/parameters.yml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DB_HOST" value="${db.host}" />
+                    <token key="DB_DATABASE" value="${db.dbname}" />
+                    <token key="DB_USERNAME" value="${db.username}" />
+                    <token key="DB_PASSWORD" value="${db.password}" />
+
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
 </project>

@@ -326,7 +326,7 @@ CREATE TABLE `storage_category` (
 
 LOCK TABLES `storage_category` WRITE;
 /*!40000 ALTER TABLE `storage_category` DISABLE KEYS */;
-INSERT INTO `storage_category` VALUES (1,NULL,'--root--','files','files',0,0,0,0);
+INSERT INTO `storage_category` VALUES (1,NULL,'--root--','files','files',1,0,1,0);
 /*!40000 ALTER TABLE `storage_category` ENABLE KEYS */;
 UNLOCK TABLES;
 

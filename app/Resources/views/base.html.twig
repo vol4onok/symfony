@@ -6,7 +6,9 @@
     {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    {% javascripts '@AppBundle/Resources/public/js/*' %}
+    {% javascripts
+    '@AppBundle/Resources/public/js/jquery.min.js'
+    '@AppBundle/Resources/public/js/*' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -77,6 +79,7 @@
                 {% endif %}
             </ul>
         </div>
+
     </div>
 </div>
 <div class="container">

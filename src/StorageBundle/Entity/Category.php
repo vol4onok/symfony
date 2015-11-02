@@ -338,9 +338,9 @@ class Category
 
     public function __toString()
     {
-        $prefix = "- ";
+        $prefix = "";
         for ($i=2; $i<= $this->lvl; $i++){
-            $prefix .= "- ";
+            $prefix .= "-";
         }
         return $prefix . $this->title;
     }
