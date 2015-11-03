@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.44, for debian-linux-gnu (i686)
+-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (i686)
 --
--- Host: localhost    Database: test_bd
+-- Host: localhost    Database: develop_project_symfony
 -- ------------------------------------------------------
--- Server version	5.5.44-0ubuntu0.14.04.1
+-- Server version	5.5.46-0ubuntu0.14.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -244,7 +244,7 @@ CREATE TABLE `fos_user_user` (
 
 LOCK TABLES `fos_user_user` WRITE;
 /*!40000 ALTER TABLE `fos_user_user` DISABLE KEYS */;
-INSERT INTO `fos_user_user` VALUES (3,'admin','admin','admin@local.com','admin@local.com',1,'9vrqmi7ll28k0kcc444gsoogoww0k0o','y1bitZJcwIFLGXCEoBflboC9euQwvVVue2AdnW90PkdPdX2SCHw/00l+hUToIfYV8bavHvsTFlosAY8frWtHKg==','2015-10-29 08:43:53',0,0,NULL,NULL,NULL,'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}',0,NULL,'2015-10-28 12:06:07','2015-10-29 08:43:53',NULL,NULL,NULL,NULL,NULL,'u',NULL,NULL,NULL,NULL,NULL,'null',NULL,NULL,'null',NULL,NULL,'null',NULL,NULL);
+INSERT INTO `fos_user_user` VALUES (3,'admin','admin','admin@local.com','admin@local.com',1,'9vrqmi7ll28k0kcc444gsoogoww0k0o','y1bitZJcwIFLGXCEoBflboC9euQwvVVue2AdnW90PkdPdX2SCHw/00l+hUToIfYV8bavHvsTFlosAY8frWtHKg==','2015-11-03 09:04:31',0,0,NULL,NULL,NULL,'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}',0,NULL,'2015-10-28 12:06:07','2015-11-03 09:04:31',NULL,NULL,NULL,NULL,NULL,'u',NULL,NULL,NULL,NULL,NULL,'null',NULL,NULL,'null',NULL,NULL,'null',NULL,NULL);
 /*!40000 ALTER TABLE `fos_user_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -315,9 +315,10 @@ CREATE TABLE `storage_category` (
   `rgt` int(11) NOT NULL,
   `root` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_A5872586989D9B62` (`slug`),
   KEY `IDX_A5872586727ACA70` (`parent_id`),
   CONSTRAINT `FK_A5872586727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `storage_category` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -344,20 +345,15 @@ CREATE TABLE `storage_file` (
   `slug` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_85B2FD05989D9B62` (`slug`),
   KEY `IDX_85B2FD0512469DE2` (`category_id`),
   CONSTRAINT `FK_85B2FD0512469DE2` FOREIGN KEY (`category_id`) REFERENCES `storage_category` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `storage_file`
 --
-
-LOCK TABLES `storage_file` WRITE;
-/*!40000 ALTER TABLE `storage_file` DISABLE KEYS */;
-/*!40000 ALTER TABLE `storage_file` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -367,4 +363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-30  2:13:19
+-- Dump completed on 2015-11-03  9:53:22

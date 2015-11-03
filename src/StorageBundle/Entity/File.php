@@ -34,7 +34,7 @@ class File
     private $file;
 
     /**
-     * @ORM\Column(name="slug", type="string", length=128)
+     * @ORM\Column(name="slug", type="string", length=128, unique=true)
      */
     private $slug;
 
